@@ -1,0 +1,1 @@
+{"type": "config", "timestamp": "2026-02-16T20:50:44.039446+00:00", "seed": "Hello there", "model_a": "anthropic/claude-opus-4-6", "model_b": "anthropic/claude-opus-4-6", "system_a": "You are a helpful assistant.", "system_b": "You are a helpful assistant."}

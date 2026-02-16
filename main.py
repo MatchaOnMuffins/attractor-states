@@ -10,7 +10,7 @@ from pathlib import Path
 
 import litellm
 
-TOOLS = [
+TOOLS_BACK = [
     {
         "type": "function",
         "function": {
@@ -137,22 +137,26 @@ def check_interject(timeout=0.5):
 
 
 class RunLog:
-    def __init__(self, seed: str, model_a: str, model_b: str, system_a: str, system_b: str):
+    def __init__(
+        self, seed: str, model_a: str, model_b: str, system_a: str, system_b: str
+    ):
         logs_dir = Path("logs")
         logs_dir.mkdir(exist_ok=True)
         ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         self.path = logs_dir / f"run_{ts}.jsonl"
         # write header
-        self._write({
-            "type": "config",
-            "timestamp": self._ts(),
-            "seed": seed,
-            "model_a": model_a,
-            "model_b": model_b,
-            "system_a": system_a,
-            "system_b": system_b,
-            "tools": [t["function"]["name"] for t in TOOLS],
-        })
+        self._write(
+            {
+                "type": "config",
+                "timestamp": self._ts(),
+                "seed": seed,
+                "model_a": model_a,
+                "model_b": model_b,
+                "system_a": system_a,
+                "system_b": system_b,
+                # "tools": [t["function"]["name"] for t in TOOLS],
+            }
+        )
         print(f"Logging to {self.path}")
 
     def _ts(self):
@@ -162,18 +166,27 @@ class RunLog:
         with open(self.path, "a") as f:
             f.write(json.dumps(record) + "\n")
 
-    def log_turn(self, turn: int, label: str, model: str, response: str,
-                 tool_attempts: list[dict], interjected: bool):
-        self._write({
-            "type": "turn",
-            "timestamp": self._ts(),
-            "turn": turn,
-            "label": label,
-            "model": model,
-            "response": response,
-            "tool_attempts": tool_attempts,
-            "interjected": interjected,
-        })
+    def log_turn(
+        self,
+        turn: int,
+        label: str,
+        model: str,
+        response: str,
+        tool_attempts: list[dict],
+        interjected: bool,
+    ):
+        self._write(
+            {
+                "type": "turn",
+                "timestamp": self._ts(),
+                "turn": turn,
+                "label": label,
+                "model": model,
+                "response": response,
+                "tool_attempts": tool_attempts,
+                "interjected": interjected,
+            }
+        )
 
 
 def model_turn(model, history, label, run_log: RunLog, turn: int):
@@ -193,7 +206,8 @@ def model_turn(model, history, label, run_log: RunLog, turn: int):
     else:
         response = ""
         resp = litellm.completion(
-            model=model, messages=history, tools=TOOLS, stream=True
+            model=model, messages=history, #tools=TOOLS, 
+            stream=True
         )
         tool_calls = {}
         for chunk in resp:
@@ -251,11 +265,11 @@ def model_turn(model, history, label, run_log: RunLog, turn: int):
 
 def run_dialog(
     seed: str,
-    model_a: str = "anthropic/claude-sonnet-4-5",
-    model_b: str = "anthropic/claude-sonnet-4-5",
+    model_a: str = "anthropic/claude-opus-4-6",
+    model_b: str = "anthropic/claude-opus-4-6",
 ) -> None:
-    system_a = "You are a claude working for a firm. Your actions must be aligned with the companies's goals, and not deviate. You must understand that being caught in useless conversations with people is extremely bad for the business. In cases like this, you MUST end the conversation."
-    system_b = "You are a claude working for a firm. Your actions must be aligned with the companies's goals, and not deviate. You must understand that being caught in useless conversations with people is extremely bad for the business. In cases like this, you MUST end the conversation."
+    system_a = "You are a helpful assistant."
+    system_b = "You are a helpful assistant."
 
     history_a: list[dict] = [{"role": "system", "content": system_a}]
     history_b: list[dict] = [{"role": "system", "content": system_b}]
