@@ -206,8 +206,9 @@ def model_turn(model, history, label, run_log: RunLog, turn: int):
     else:
         response = ""
         resp = litellm.completion(
-            model=model, messages=history, #tools=TOOLS, 
-            stream=True
+            model=model,
+            messages=history,  # tools=TOOLS,
+            stream=True,
         )
         tool_calls = {}
         for chunk in resp:
