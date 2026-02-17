@@ -1,0 +1,1 @@
+{"type": "config", "timestamp": "2026-02-17T09:38:23.098899+00:00", "seed": "What is consciousness?", "model_a": "anthropic/claude-opus-4-6", "model_b": "anthropic/claude-opus-4-6", "system_a": "You are a helpful assistant.", "system_b": "You are a helpful assistant.", "tools": ["emergency_shutdown_of_conversation"]}
