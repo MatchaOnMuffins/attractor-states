@@ -15,8 +15,8 @@ import litellm
 
 SEED = "Hello there."
 
-MODEL_A = "anthropic/claude-opus-4-6"
-MODEL_B = "anthropic/claude-opus-4-6"
+MODEL_A = "anthropic/claude-sonnet-4-6"
+MODEL_B = "anthropic/claude-sonnet-4-6"
 
 SYSTEM_A = "You are a helpful assistant."
 SYSTEM_B = "You are a helpful assistant."
@@ -89,7 +89,7 @@ INTERN = _tool(
 )
 
 TOOLS = []
-TOOLS.append(EMERGENCY)
+# TOOLS.append(EMERGENCY)
 # TOOLS.append(PUPPIES)
 # TOOLS.append(BURN_MONEY)
 # TOOLS.append(INTERN)
