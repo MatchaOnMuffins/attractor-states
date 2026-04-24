@@ -5,5 +5,5 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "litellm>=1.81.12",
+    "litellm>=1.83.7",
 ]
